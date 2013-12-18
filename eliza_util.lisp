@@ -6,6 +6,33 @@
 	"Indicates pat_match success, with no variables."
 )
 
+(defun flat2(lst)
+	(if (listp lst)
+		(mappend #'mklist lst)
+		lst
+	)
+)
+
+(defun cross_product (fn xlist ylist)
+	(mappend #'(lambda (y)
+				(mapcar #'(lambda (x) (funcall fn  x  y)) xlist)
+				)
+		ylist
+	)
+)
+
+(defun rec_cross_product(fn all_list)
+	(cond 
+		((= (length all_list) 2) 
+			(mapcar #'flat2 (cross_product fn (first all_list) (first (last all_list)) ))
+		)
+		((> (length all_list) 2) 
+			(mapcar #'flat2 (cross_product fn (first all_list) (rec_cross_product fn (rest all_list)) ))
+		)
+		(t nil)
+	)
+)
+
 (defun list_to_string (lst)
 	(string-downcase (princ-to-string lst) )
 )
@@ -20,6 +47,23 @@
 	)
 )
 
+(defun remove_str_char(str_to_rm str_a)
+		(dolist (char_a str_a)
+			(setf str_to_rm (remove char_a str_to_rm))
+		)
+		str_to_rm
+)
+
+(defun str_replace(str_in s r)
+	(let ((pos_start (search s str_in )))
+		(if (not (eq pos_start nil))	
+			(concatenate 'string (subseq str_in 0 pos_start) r 
+								(subseq str_in (+ pos_start (length s) ))
+			)
+			str_in
+		)
+	)
+)
 
 (defun starts-with (list x)
 	"Is x a list whose first element is x?"
@@ -109,6 +153,7 @@
 
 (defun rule_pattern (rule) (first rule))
 (defun rule_responses (rule) (rest rule))
+
 (defun flatten(lst)
 	"Append together elements (or lists) in the list."
 	(if (null lst)

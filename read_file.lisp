@@ -12,14 +12,16 @@
 	)
 )
 
-(defun load_words_file(filename)
-	;(mapcar #'flatten (parse_line (read_file filename)))
+(defun load_raw_file2(filename)
 	(parse_line2 (read_file filename))
 )
 
+
+(defun load_raw_file1(filename)
+	(parse_line1 (read_file filename))
+)
+
 (defun read_file(filename)
-	;(setf ht (make-hash-table))
-	;(setf this_label "")
 	(with-open-file (stream filename)
 		 (loop for line = (read-line stream nil 'foo)
 				   until (eq line 'foo)
@@ -28,7 +30,6 @@
 	)
 )
 
-
 (defun new_label( val list_out)
     (cons  (string_to_list val) list_out )
 )
@@ -36,11 +37,30 @@
 	(cons (append (first list_out) (string_to_list val)) (rest list_out)) 
 )
 
+(defun parse_line1(list_in  &optional(list_out '((0))) )
+   (declare (NOTINLINE parse_line1)) ; and the compiler can't ignore NOTINLINE
+	(if (not (null list_in))
+		(let* ((first_list (first list_in ))(rest_list (rest list_in))(label (is_label1 first_list)))
+			(if (eq rest_list nil) 
+				(if	(eq label nil) 
+					(new_item  (remove_str_char first_list '(#\[ #\])) list_out)
+					(new_label (write-to-string (length list_out)) list_out)
+				)	
+				(parse_line1 rest_list (parse_line1 (list first_list) list_out))
+			)
+		)
+		list_out	
+	)
+)
+
+(defun is_label1(str_in)
+	 (not (eq (search dash_label str_in ) nil) )
+)
+
 (defun parse_line2(list_in  &optional(list_out '()) )
    (declare (NOTINLINE parse_line2)) ; and the compiler can't ignore NOTINLINE
 	(if (not (null list_in))
-		(let* ((first_list (first list_in ))(rest_list (rest list_in))(label (is_label first_list)))
-			;(print first_list)
+		(let* ((first_list (first list_in ))(rest_list (rest list_in))(label (is_label2 first_list)))
 			(if (eq rest_list nil) 
 				(if	(eq label nil) 
 					(new_item  first_list list_out)
@@ -54,16 +74,13 @@
 )
 
 
-(defun is_label(str_in)
+(defun is_label2(str_in)
 	(if (> (length str_in) (length dash_label))
 		(let* ((pos_start (length dash_label))
 				(pos_end (search dash_label str_in :start2 pos_start))
 			)
-			;(print (length str_in))
-			;(print (length dash_label))
 			(if (not (eq pos_end nil))
 				(str_replace (subseq str_in pos_start pos_end) " " "_")
-			;	(subseq str_in pos_start pos_end)
 			)
 		)
 	)
