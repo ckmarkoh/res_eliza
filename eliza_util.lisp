@@ -13,25 +13,28 @@
 	)
 )
 
-(defun cross_product (fn xlist ylist)
-	(mappend #'(lambda (y)
-				(mapcar #'(lambda (x) (funcall fn  x  y)) xlist)
-				)
-		ylist
+(defun cross_product (xlist ylist)
+	(if (eq ylist nil)
+		(mapcar #'list xlist)
+		(mappend #'(lambda (y)
+					(mapcar #'(lambda (x) (funcall #'list x  y)) xlist)
+					)
+			ylist
+		)
 	)
 )
 
-(defun rec_cross_product(fn all_list)
+(defun rec_cross_product(all_list)
 	(cond 
 		((= (length all_list) 2) 
-			(mapcar #'flat2 (cross_product fn (first all_list) (first (last all_list)) ))
+			(mapcar #'flat2 (cross_product (first all_list) (first (last all_list)) ))
 		)
 		((> (length all_list) 2) 
-			(mapcar #'flat2 (cross_product fn (first all_list) (rec_cross_product fn (rest all_list)) ))
+			(mapcar #'flat2 (cross_product (first all_list) (rec_cross_product  (rest all_list)) ))
 		)
-;		((= (length all_list) 1) ;TODO
-;			(mapcar #'flat2 ( (first all_list) (first (last all_list)) ))
-;		)
+		((= (length all_list) 1) ;TODO
+			(cross_product  (first all_list) nil )
+		)
 		(t nil)
 	)
 )

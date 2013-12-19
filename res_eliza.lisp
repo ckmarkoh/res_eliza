@@ -1,12 +1,12 @@
 (load "read_file")
 (defconstant txt_dir "txt/")
-;	(defconstant txt_rules "ReasoningRules.txt")
-;	(defconstant txt_toks "ReasoningToks.txt")
-;	(defconstant txt_proper "ProperNouns.txt")
+	(defconstant txt_rules "ReasoningRules.txt")
+	(defconstant txt_toks "ReasoningToks.txt")
+	(defconstant txt_proper "ProperNouns.txt")
 
-(defconstant txt_rules "rr.txt")
-(defconstant txt_toks "rs.txt")
-(defconstant txt_proper "pn.txt")
+;	(defconstant txt_rules "rr.txt")
+;	(defconstant txt_toks "rs.txt")
+;	(defconstant txt_proper "pn.txt")
 (defconstant res_pat_symbol 
 		'(?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?o ?p ?q ?r ?s ?t ?u ?v ?w ?x ?y ?z)
 )
@@ -14,6 +14,7 @@
 (defun load_rules()
 	(load_raw_file1 (concatenate 'string txt_dir txt_rules))
 )
+
 (defun load_words()
 	(append	(load_raw_file2 (concatenate 'string txt_dir txt_proper))
 			(load_raw_file2 (concatenate 'string txt_dir txt_toks))
@@ -61,7 +62,7 @@
 
 (defun gen_rules (all_rules all_words) ;TODO
 	(mappend #'(lambda(rules)
-					(rec_cross_product #'list 
+					(rec_cross_product  
 						(mapcar #'(lambda(rule)
 									(lookup rule all_words)	
 								)	
@@ -71,6 +72,7 @@
 				) 
 		all_rules)  
 )
+
 (defun gen_res_pat (all_res_pats)
 	(mapcar #'(lambda(res_pats)
 		(flat2	(loop for res_pat in res_pats 
