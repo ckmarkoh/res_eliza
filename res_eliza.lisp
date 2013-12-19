@@ -1,6 +1,7 @@
 (load "read_file")
 (defconstant txt_dir "txt/")
-	(defconstant txt_rules "ReasoningRules.txt")
+	(defconstant txt_rules "SimpleRules.txt")
+;	(defconstant txt_rules "ReasoningRules.txt")
 	(defconstant txt_toks "ReasoningToks.txt")
 	(defconstant txt_proper "ProperNouns.txt")
 
