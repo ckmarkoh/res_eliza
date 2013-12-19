@@ -29,6 +29,9 @@
 		((> (length all_list) 2) 
 			(mapcar #'flat2 (cross_product fn (first all_list) (rec_cross_product fn (rest all_list)) ))
 		)
+;		((= (length all_list) 1) ;TODO
+;			(mapcar #'flat2 ( (first all_list) (first (last all_list)) ))
+;		)
 		(t nil)
 	)
 )
