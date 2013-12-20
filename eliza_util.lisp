@@ -95,6 +95,9 @@
 	"Get the value part (for var) from a binding list."
 	(binding_val (get_binding var bindings))
 )
+(defun lookup_nth (var bindings N)
+	(nth N (lookup var bindings)) 
+)
 
 (defun extend_bindings(var val bindings)
 	"Add a (var . value) pair to a binding list."
